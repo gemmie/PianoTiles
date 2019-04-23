@@ -1,0 +1,45 @@
+.flex-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    width: 100%;
+    height: 800px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lane-wrapper {
+    display: flex;
+    width: 450px;
+    height: 80%;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: white;
+    font-size: 30px;
+}
+
+@media only screen and (max-width: 500px) {
+    .flex-wrapper {
+        height: 550px;
+    }
+
+    .lane-wrapper {
+        width: 90%;
+    }
+}
+
+.lane {
+    border: 1px white solid;
+    width: 25%;
+}
+
+
+body {
+    background: #36D1DC; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #5B86E5, #36D1DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
