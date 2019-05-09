@@ -1,42 +1,38 @@
-$('#startbutton').click(() => {
+$('#startbutton').on("click",() => {
     reset();
     game();
 });
 
-
+const maxNoOfTiles = 150;
 var score = 0;
 var previousLane = 0;
 var generatedBlacks = 0;
 var gameOverFlag = true;
 var interval;
+var checkInterval;
 
-//generateTiles();
 
-$('.lane').click(function () {
-   // console.log(this);
-    if (!gameOverFlag && !$(this).hasClass('black')) {
-        gameOver();
-    }
+var bottomLine =$("#lane0")[0].offsetHeight;
+
+$('.lane').on("click",function () {
+    gameOver();
 });
 
 function generateTiles() {
     let laneNo = Math.trunc(Math.random() * 3);
     if (previousLane === laneNo) {
-        laneNo = Math.round(Math.random() * 3);
+        laneNo = Math.round(Math.random() * laneNo);
     }
-    //laneNo = 0;
+
     previousLane = laneNo;
     let lane = $('#lane' + laneNo);
 
     $(lane).prepend("<div class='black' style= 'background-color: black; width: 100%;height: 25%; position: absolute; top: 0px'></div>");
     generatedBlacks++;
     let child = $(lane).children().first()[0];
-    console.log($(child));
     const length = lane[0].offsetHeight - child.offsetHeight;
-    $(child).click(function (e) {
+    $(child).on("click",function (e) {
         if (!gameOverFlag) {
-            console.log("clicked");
-//            console.log(this);
             score++;
             $(this).stop();
             $(this).remove();
@@ -45,20 +41,35 @@ function generateTiles() {
         }
     });
     $(child).animate({top: '+=' + length}, {duration: 3000, easing: 'linear'});
-
 }
 
+
+function checkIfGameOver() {
+    let blacks = $(".black");
+    let max = 0;
+    let idx = 0;
+    for (let i = 0; i < blacks.length; i++) {
+        let top = blacks[i].offsetTop;
+        if(top > max){
+            max = top;
+            idx = i;
+        }
+    }
+    if (max + blacks[idx].offsetHeight >= bottomLine) {
+        gameOver();
+    }
+}
 function game() {
-    interval = window.setInterval(generateTiles, 900);
+    interval = window.setInterval(generateTiles, 950);
+    checkInterval = window.setInterval(checkIfGameOver, 5);
 }
 
 
 function gameOver() {
-    gameOverFlag = true;
-    $('.black').remove();
-    console.log("game over");
+    $('.black').stop();
     $('#startbutton').html("TRY AGAIN");
-    window.clearInterval(interval)
+    window.clearInterval(interval);
+    window.clearInterval(checkInterval);
 }
 
 function reset() {
@@ -67,5 +78,6 @@ function reset() {
     generatedBlacks = 0;
     previousLane = 0;
     $('#startbutton').html("START");
+    $(".black").remove();
     generateTiles();
 }
